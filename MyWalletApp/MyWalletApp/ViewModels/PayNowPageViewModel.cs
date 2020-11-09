@@ -2,6 +2,7 @@
 using MyWalletApp.Models;
 using Prism.Commands;
 using Prism.Navigation;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,7 +30,18 @@ namespace MyWalletApp.ViewModels
         public decimal TotalAmount { get; set; }
         public ObservableCollection<Currency> Currencies { get; set; }
 
+        public DelegateCommand MakePaymentCommand { get=>new DelegateCommand(async()=> {
+            if(TotalAmount>0&&!string.IsNullOrEmpty(Cvv)&& ExpirationDate>DateTime.Now && !string.IsNullOrEmpty(NumberCreditCard))
+            {
+                await _navigationService.GoBackAsync();
+                _dialogService.ShowDialog("VerificationDialog", CloseDialogCallback);
+            }
 
+        });  }
+        void CloseDialogCallback(IDialogResult dialogResult)
+        {
+
+        }
         private Currency selectCurrency;
 
         public Currency SelectCurrency
@@ -38,8 +50,10 @@ namespace MyWalletApp.ViewModels
             set { selectCurrency = value;
                 if (invoce!=null)
                 {
-                    Task.Run(async () => { TotalAmount = await _multiCurrency.ConvertToOtherCurrency(selectCurrency.Rate, invoce.CurrencyRate, TotalAmount);
-                        invoce.CurrencyRate = selectCurrency.Rate;
+                    if (lastRate == 0)
+                        lastRate = invoce.CurrencyRate;
+                    Task.Run(async () => { TotalAmount = Math.Round(await _multiCurrency.ConvertToOtherCurrency(selectCurrency.Rate, lastRate, TotalAmount),2);
+                        lastRate = selectCurrency.Rate;
                     });
                    
                 }
@@ -48,7 +62,7 @@ namespace MyWalletApp.ViewModels
             }
         }
         public DelegateCommand LoadCommand { get; set; }
-
+        private decimal lastRate;
         private string invoceNo;
         private Invoce invoce;
         public string InvoceNo
@@ -56,22 +70,23 @@ namespace MyWalletApp.ViewModels
             get { return invoceNo; }
             set {
                 invoceNo = value;
-                if (invoceNo != null)
+                if (invoceNo != null&& !HasBills)
                 {
-                        invoce = Customer.Invoces.Where(e => $"{e.Id}" == InvoceNo).FirstOrDefault();
-                        if (invoce!=null)
-                        {
-                            TotalAmount = (decimal)invoce?.Amount;
-                            SelectCurrency = Currencies.FirstOrDefault(e => e.Id == invoce?.Currency.Id);
-                        }
+                        invoce = Customer.Invoces.Where(e => $"{e.InvoceNo}" == InvoceNo).FirstOrDefault();
+                        TotalAmount = invoce!=null?(decimal)invoce?.Amount:0;
+                    if (invoce != null)
+                    {
+                        SelectCurrency = Currencies.FirstOrDefault(e => e.Id == invoce?.Currency.Id);
+                    }
 
 
                 }
             }
         }
-
-        public PayNowPageViewModel(INavigationService navigationService, IData data, IMultiCurrency multiCurrency) : base(navigationService, data, multiCurrency)
+        IDialogService _dialogService;
+        public PayNowPageViewModel(INavigationService navigationService, IData data, IMultiCurrency multiCurrency,IDialogService dialogService) : base(navigationService, data, multiCurrency)
         {
+            _dialogService = dialogService;
             ExpirationDate = DateTime.Now;
             LoadCommand = new DelegateCommand(async () => await LoadCurrency());
             LoadCommand.Execute();
@@ -81,14 +96,41 @@ namespace MyWalletApp.ViewModels
             SelectCurrency = Currencies.FirstOrDefault();
            
         }
-
+        public bool HasBills { get; set; }
         public void Initialize(INavigationParameters parameters)
         {
             var param = parameters[nameof(Payment)] as Customer;
+            var invoces = parameters[nameof(Invoce)] as Invoce[];
+            var payment = parameters[nameof(PayNowPageViewModel)] as Payment;
             if (param != null)
             {
                 Customer = param;
             }
+            if (invoces!=null)
+            {
+                invoce = invoces.FirstOrDefault();
+                invoces.ToList().ForEach(async e =>
+                {
+                    // converter any currency that is different from First invoce.
+                    if (e.CurrencyRate != invoce.CurrencyRate)
+                        TotalAmount += await _multiCurrency.ConvertToOtherCurrency(invoce.CurrencyRate, e.CurrencyRate, e.Amount);
+                    else
+                    TotalAmount += e.Amount;
+                });
+                HasBills = true;
+                InvoceNo = string.Join(",", invoces.Select(e=>e.InvoceNo));
+                SelectCurrency = Currencies.FirstOrDefault(e => e.Id == invoce.Currency.Id);
+            }
+            if (payment!=null)
+            {
+                NumberCreditCard = $"{payment.NumberCard}";
+                ExpirationDate = payment.CardExpirationDate;
+
+
+            }
+
+          
+
         }
     }
 }

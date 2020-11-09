@@ -22,7 +22,7 @@
                        BackgroundGradientEndPoint="0,3">
         <Grid>
             <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="1" ColumnDefinitions="Auto,*"  Visual="Material">
-                <yummy:PancakeView Padding="10" sharedTransitions:Transition.Name="pancakeInfo" Grid.ColumnSpan="2"  BackgroundColor="{StaticResource PrimaryColor}"  CornerRadius="0,0,60,60">
+                <yummy:PancakeView Padding="10" sharedTransitions:Transition.Name="pancakeInfo" Grid.ColumnSpan="2"   BackgroundColor="{StaticResource PrimaryColor}"  CornerRadius="0,0,60,60">
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
                         <ImageButton HorizontalOptions="StartAndExpand"
                      BackgroundColor="Transparent"
@@ -77,32 +77,36 @@
                     </Grid>
                 </yummy:PancakeView>
                 <Label HorizontalOptions="StartAndExpand"
-               Text="Invoces"
+               Text="Transactions"
                Margin="20,0,20,0"
                    TextColor="{StaticResource SubtitletColor}"
                FontSize="Title"
                Grid.Row="2"/>
-                <CollectionView Margin="10" Grid.Row="3" ItemsSource="{Binding Invoces}"
-                                ItemSizingStrategy="MeasureFirstItem">
+                <CollectionView Margin="10" Grid.Row="3" ItemsSource="{Binding Invoces,Mode=TwoWay}"
+                                ItemSizingStrategy="MeasureFirstItem"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectionItem,Mode=TwoWay}"
+                                BackgroundColor="Transparent">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="10"
                                        Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <yummy:PancakeView CornerRadius="10" Padding="10" Margin="10,0,10,0" BackgroundColor="#331391">
-                                <Grid RowDefinitions="Auto" ColumnDefinitions="0.49*,1.5*,1.5*" >
-                                    <yummy:PancakeView CornerRadius="{OnPlatform iOS=23,Android=26 }"
+                            <Grid Margin="10,0,10,0" BackgroundColor="{StaticResource LayoutColor}">
+                                <yummy:PancakeView HorizontalOptions="FillAndExpand" CornerRadius="10" Padding="10"  BackgroundColor="#331391">
+                                    <Grid RowDefinitions="Auto" ColumnDefinitions="0.49*,1.5*,1.5*" >
+                                        <yummy:PancakeView CornerRadius="{OnPlatform iOS=23,Android=26 }"
                                                    BackgroundColor="#5E29F2"
                                                        Padding="15"
                                                  >
-                                        <Label Text="{Binding Currency.Symbol}"
+                                            <Label Text="{Binding Currency.Symbol}"
                                              FontSize="{OnPlatform iOS=12,Android=16 }"
                                                TextColor="White"
                                            HorizontalTextAlignment="Center"
                                            VerticalTextAlignment="Center"/>
-                                    </yummy:PancakeView>
-                                    <Label  Text="{Binding Description}"
+                                        </yummy:PancakeView>
+                                        <Label  Text="{Binding Description}"
                                         Grid.Column="1"
                                             MaxLines="1"
                                             LineBreakMode="TailTruncation"
@@ -110,15 +114,26 @@
                                         VerticalOptions="CenterAndExpand"
                                         TextColor="White"
                                        FontSize="Small"/>
-                                    <Label 
+                                        <Label 
                                    Text="{Binding Amount,StringFormat='{0:C2}'}"
                                        FontSize="Medium" 
                                      TextColor="White"
                                         HorizontalOptions="EndAndExpand"
                                         VerticalOptions="CenterAndExpand"
                                         Grid.Column="2"/>
-                                </Grid>
-                            </yummy:PancakeView>
+
+                                    </Grid>
+
+                                </yummy:PancakeView>
+                                <Grid.Triggers>
+                                    <DataTrigger TargetType="Grid"
+                                                 Binding="{Binding IsSelected}"
+                                                 Value="true">
+                                        <Setter Property="BackgroundColor" Value="Red" />
+                                    </DataTrigger>
+                                </Grid.Triggers>
+
+                            </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     <CollectionView.Footer>
@@ -150,48 +165,64 @@
                    TextColor="{StaticResource SubtitletColor}"
                FontSize="Title"
                Grid.Row="1"/>
-                <CollectionView Grid.Row="2" ItemsSource="{Binding Payments}">
+                <CollectionView Grid.Row="2" ItemsSource="{Binding Payments}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectPaymentSave}">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="10"
                                        Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <yummy:PancakeView CornerRadius="10" Padding="10" Margin="10,0,10,0" BackgroundColor="#331391">
-                                <Grid  ColumnDefinitions="0.8*,1.5*,1.5*" >
-                                    <Image  HorizontalOptions="StartAndExpand" >
-                                        <Image.Source>
-                                            <FontImageSource 
+                                        <Grid Margin="10,0,10,0" BackgroundColor="{StaticResource LayoutColor}">
+                                            <yummy:PancakeView CornerRadius="10" Padding="10" BackgroundColor="#331391">
+                                                <Grid  ColumnDefinitions="0.8*,1.5*,1.5*" >
+                                                    <Image  HorizontalOptions="StartAndExpand" >
+                                                        <Image.Source>
+                                                            <FontImageSource 
                                              FontFamily="fa-Brands"
                                             Glyph="{Binding NumberCard, Converter={StaticResource NumberToImageTypeCardConverter}}"
                                             Color="{StaticResource TitleLabelColor}"
                                             Size="50"/>
-                                        </Image.Source>
-                                    </Image>
-                                    <Label 
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <Label 
                                         Grid.Column="1"
                                         VerticalTextAlignment="Center"
                                         VerticalOptions="CenterAndExpand"
                                         TextColor="White"
                                        >
-                                        <Label.FormattedText>
-                                            <FormattedString >
-                                                <Span  Text="{Binding NumberCard,Converter={StaticResource NumberToNameCardConverter}}" FontSize="16"/>
-                                                <Span Text="{Static system:Environment.NewLine}"/>
-                                                <Span Text="{Binding HideNumberCard}" FontSize="{OnPlatform iOS=12,Android=14}"/>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                    <Label 
+                                                        <Label.FormattedText>
+                                                            <FormattedString >
+                                                                <Span  Text="{Binding NumberCard,Converter={StaticResource NumberToNameCardConverter}}" FontSize="16"/>
+                                                                <Span Text="{Static system:Environment.NewLine}"/>
+                                                                <Span Text="{Binding HideNumberCard}" FontSize="{OnPlatform iOS=12,Android=14}"/>
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+                                                    <Label 
                                    Text="{Binding AmountPay,StringFormat='{0:C2}'}"
                                        FontSize="Medium" 
                                      TextColor="White"
                                         HorizontalOptions="EndAndExpand"
                                         VerticalOptions="CenterAndExpand"
                                         Grid.Column="2"/>
-                                </Grid>
-                            </yummy:PancakeView>
-                        </DataTemplate>
+                                                </Grid>
+                                            </yummy:PancakeView>
+                                            <VisualStateManager.VisualStateGroups>
+
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="Selected">
+                                                        <VisualState.Setters>
+                                                            <Setter Property="BackgroundColor"
+                                        Value="{StaticResource NegativeAmountColor}" />
+                                                        </VisualState.Setters>
+                                                    </VisualState>
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                        </Grid>
+                                    </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                           </Grid>

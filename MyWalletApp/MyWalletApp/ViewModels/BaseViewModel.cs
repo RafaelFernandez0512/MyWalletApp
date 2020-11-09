@@ -17,12 +17,7 @@ namespace MyWalletApp.ViewModels
         protected IMultiCurrency _multiCurrency;
         public Customer Customer { get; set; }
         public DelegateCommand  BackNavigationCommand { get => new DelegateCommand(async() =>await _navigationService.GoBackAsync()); }
-        public DelegateCommand GoToPayNowCommand { get=>  new DelegateCommand(async () =>
-        {
-            var param = new NavigationParameters();
-            param.Add(nameof(Payment), Customer);
-            await _navigationService.NavigateAsync(new Uri($"/{NavigationUri.PayNow}", UriKind.Relative), param);
-        }); }
+        public DelegateCommand GoToPayNowCommand { get; set; }
         public BaseViewModel(INavigationService navigationService,IData data,IMultiCurrency multiCurrency)
         {
             _navigationService = navigationService;

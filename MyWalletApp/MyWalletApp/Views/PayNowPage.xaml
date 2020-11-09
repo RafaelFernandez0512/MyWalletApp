@@ -147,7 +147,16 @@
 
             <Label Text="Invoce No:" FontAttributes="Bold" FontSize="Medium" TextColor="{StaticResource TitleLabelColor}" Grid.Row="6" Grid.Column="0"/>
             <yummy:PancakeView Grid.ColumnSpan="2" Grid.Row="7"  Style="{StaticResource PancakeEntryKey}">
-                <Entry Text="{Binding InvoceNo}"/>
+                <Entry Text="{Binding InvoceNo}" >
+                    <Entry.Triggers>
+                        <DataTrigger TargetType="Entry"
+                                     Binding="{Binding HasBills}"
+                                     Value="true">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Entry.Triggers>
+
+                </Entry>
             </yummy:PancakeView>
             <yummy:PancakeView Grid.Column="1" Grid.Row="8" Margin="10">
                 <Grid VerticalOptions="CenterAndExpand">
@@ -200,7 +209,7 @@
                 <Label Grid.Column="1" Margin="10,5,40,5" TextColor="White" VerticalOptions="CenterAndExpand" FontSize="Title" Text="Pay Now"/>
             </Grid>
             <yummy:PancakeView.Behaviors>
-                <behaviers:ViewTappedButtonBehavior  AnimationType="Scale"/>
+                <behaviers:ViewTappedButtonBehavior Command="{Binding MakePaymentCommand}"  AnimationType="Scale"/>
             </yummy:PancakeView.Behaviors>
         </yummy:PancakeView>
     </Grid>

@@ -1,5 +1,6 @@
 ﻿using MyWalletApp.Datas;
 using MyWalletApp.Helpers;
+using MyWalletApp.ViewModels;
 using MyWalletApp.Views;
 using Plugin.SharedTransitions;
 using Prism;
@@ -28,6 +29,7 @@ namespace MyWalletApp
             containerRegistry.RegisterForNavigation<MainPage, ViewModels.MainPageViewModel>(NavigationUri.Main);
             containerRegistry.RegisterForNavigation<PaymentsHeaderPage>(NavigationUri.PaymentsHeader);
             containerRegistry.RegisterForNavigation<PayNowPage>(NavigationUri.PayNow);
+            containerRegistry.RegisterDialog<VerificationDialog, VerificationDialogViewModel>();
 
 
         }

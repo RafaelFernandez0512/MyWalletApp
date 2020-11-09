@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Frame xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyWalletApp.Views.VerificationDialog"
+             xmlns:prism="http://prismlibrary.com"
+       xmlns:system="clr-namespace:System;assembly=netstandard" xmlns:behaviers="clr-namespace:MyWalletApp.Behaviers"
+       prism:ViewModelLocator.AutowireViewModel="True"
+            prism:DialogLayout.RelativeWidthRequest="{OnIdiom Default=0.7, Desktop=0.5}"
+            HasShadow="false"
+           Margin="50,20,50,20"
+           CornerRadius="20"
+            BackgroundColor="{StaticResource PrimaryColor}">
+    <StackLayout >
+        <Label HorizontalOptions="CenterAndExpand"
+               VerticalTextAlignment="Center"
+               HorizontalTextAlignment="Center"
+               >
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span   Text="" 
+                            FontSize="Header" 
+                            FontFamily="FontAwesomeSolid"
+                            TextColor="{StaticResource PositiveAmountColor}"/>
+                    <Span Text="{x:Static system:Environment.NewLine}"/>
+                    <Span Text="{x:Static system:Environment.NewLine}"/>
+                    <Span   Text="Has made payment."
+                            FontAttributes="Bold"
+                            FontSize="Medium" 
+                            TextColor="{StaticResource TitleLabelColor}"/>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+    </StackLayout>
+    <Frame.GestureRecognizers>
+        <TapGestureRecognizer  Command="{Binding CloseCommand}"/>
+    </Frame.GestureRecognizers>
+    <Frame.Behaviors>
+        <behaviers:ViewTappedButtonBehavior Command="{Binding CloseCommand}" AnimationType="Shake"/>
+    </Frame.Behaviors>
+</Frame>

@@ -26,7 +26,14 @@ namespace MyWalletApp.ViewModels
         public DelegateCommand GoToNavigationCommand { get; set; }
         public MainPageViewModel(INavigationService navigationService, IData data, IMultiCurrency multiCurrency) :base(navigationService, data, multiCurrency)
         {
-            GoToNavigationCommand = new DelegateCommand(async () =>
+            GoToPayNowCommand  = new DelegateCommand(async () =>
+            {
+                var param = new NavigationParameters();
+                param.Add(nameof(Payment), Customer);
+                await _navigationService.NavigateAsync(new Uri($"/{NavigationUri.PayNow}", UriKind.Relative), param);
+            });
+        
+        GoToNavigationCommand = new DelegateCommand(async () =>
             {
                 var param = new NavigationParameters();
                 param.Add(nameof(Invoce), Customer);
