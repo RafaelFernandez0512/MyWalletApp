@@ -21,7 +21,7 @@
     <yummy:PancakeView BackgroundGradientStartPoint="1,2" 
                        BackgroundGradientEndPoint="0,3">
         <Grid>
-            <Grid RowDefinitions="Auto,Auto,Auto,0.8*,Auto,Auto,1.2*" RowSpacing="1" ColumnDefinitions="Auto,*"  Visual="Material">
+            <Grid RowDefinitions="Auto,Auto,Auto,*" RowSpacing="1" ColumnDefinitions="Auto,*"  Visual="Material">
                 <yummy:PancakeView Padding="10" sharedTransitions:Transition.Name="pancakeInfo" Grid.ColumnSpan="2"  BackgroundColor="{StaticResource PrimaryColor}"  CornerRadius="0,0,60,60">
                     <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
                         <ImageButton HorizontalOptions="StartAndExpand"
@@ -121,10 +121,12 @@
                             </yummy:PancakeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                </CollectionView>
-                <Label Text="Show All Invoces"
+                    <CollectionView.Footer>
+
+                        <Grid RowDefinitions="Auto,Auto,250">
+                          <Label Text="Show All Invoces"
                            FontSize="Medium"
-                           Grid.Row="4"
+                           
                             VerticalOptions="StartAndExpand"
                        HorizontalOptions="CenterAndExpand"
                        HorizontalTextAlignment="Center"
@@ -142,13 +144,13 @@
                         </DataTrigger>
                     </Label.Triggers>
                 </Label>
-                <Label HorizontalOptions="StartAndExpand"
+                 <Label HorizontalOptions="StartAndExpand"
                Text="Credit Card"
               VerticalOptions="EndAndExpand"
                    TextColor="{StaticResource SubtitletColor}"
                FontSize="Title"
-               Grid.Row="5"/>
-                <CollectionView Grid.Row="6" ItemsSource="{Binding Payments}">
+               Grid.Row="1"/>
+                <CollectionView Grid.Row="2" ItemsSource="{Binding Payments}">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="10"
                                        Orientation="Vertical"/>
@@ -171,10 +173,10 @@
                                         VerticalTextAlignment="Center"
                                         VerticalOptions="CenterAndExpand"
                                         TextColor="White"
-                                       FontSize="Medium">
+                                       >
                                         <Label.FormattedText>
                                             <FormattedString >
-                                                <Span  Text="{Binding NumberCard,Converter={StaticResource NumberToNameCardConverter}}" FontSize="Medium"/>
+                                                <Span  Text="{Binding NumberCard,Converter={StaticResource NumberToNameCardConverter}}" FontSize="16"/>
                                                 <Span Text="{Static system:Environment.NewLine}"/>
                                                 <Span Text="{Binding HideNumberCard}" FontSize="{OnPlatform iOS=12,Android=14}"/>
                                             </FormattedString>
@@ -184,12 +186,20 @@
                                    Text="{Binding AmountPay,StringFormat='{0:C2}'}"
                                        FontSize="Medium" 
                                      TextColor="White"
+                                        HorizontalOptions="EndAndExpand"
+                                        VerticalOptions="CenterAndExpand"
                                         Grid.Column="2"/>
                                 </Grid>
                             </yummy:PancakeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                          </Grid>
+                        </CollectionView.Footer>
+
+                </CollectionView>
+
+
 
             </Grid>
             <yummy:PancakeView  VerticalOptions="EndAndExpand" Style="{StaticResource ButtonPayNow}" >
