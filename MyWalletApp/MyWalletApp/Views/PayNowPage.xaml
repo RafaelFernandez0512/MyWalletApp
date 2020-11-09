@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyWalletApp.Views.PayNowPage"
+              NavigationPage.HasNavigationBar="False"
+                xmlns:system="clr-namespace:System;assembly=netstandard"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" xmlns:converters="clr-namespace:MyWalletApp.Converters" xmlns:behaviers="clr-namespace:MyWalletApp.Behaviers">
+    <ContentPage.Resources>
+        <Style TargetType="yummy:PancakeView" x:Key="PancakeEntryKey">
+            <Setter Property="BackgroundColor" Value="{StaticResource TitleLabelColor}"/>
+            <Setter Property="CornerRadius" Value="{OnPlatform iOS=16,Android=20}"/>
+            <Setter Property="Padding" Value="10,0,10,0"/>
+        </Style>
+        <converters:StringToFormatStripeConverter x:Key="StringToFormatStripeConverter"/>
+        <converters:NumberToImageTypeCardConverter x:Key="NumberToImageTypeCardConverter"/>
+    </ContentPage.Resources>
+    <Grid BackgroundColor="{StaticResource LayoutColor}">
+
+        <Grid  Padding="10" RowSpacing="10" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" >
+            <ImageButton HorizontalOptions="StartAndExpand"
+                     BackgroundColor="Transparent"
+                     VerticalOptions="StartAndExpand"
+                             Margin="10"
+                              Command="{Binding BackNavigationCommand}"
+                    >
+                <ImageButton.Source>
+                    <FontImageSource 
+                              FontFamily="fa-Solid"
+                             Glyph="&#xf060;"
+                             Color="{StaticResource TitleLabelColor}"
+                             Size="30"/>
+                </ImageButton.Source>
+
+            </ImageButton>
+            <yummy:PancakeView  x:Name="CreditCardView"  Grid.ColumnSpan="2" Padding="20,10,10,10" Grid.Row="1" Margin="10"  BackgroundColor="{StaticResource PrimaryColor}" CornerRadius="20">
+                <yummy:PancakeView.Shadow>
+                    <yummy:DropShadow Offset="10,30" BlurRadius="2" Color="{StaticResource PrimaryColor}"/>
+                </yummy:PancakeView.Shadow>
+                <Grid x:Name="FrontCreditCard" RowDefinitions="Auto,Auto,Auto">
+                    <Image  Source="ic_chip" Grid.Row="0" Aspect="AspectFill" HeightRequest="50" WidthRequest="50" HorizontalOptions="StartAndExpand">
+
+                    </Image>
+                    <Label Margin="5"
+                                 Grid.Column="1"
+                                 TextColor="White"
+                                 HorizontalOptions="EndAndExpand"
+                            VerticalOptions="CenterAndExpand"
+                                 Grid.Row="0">
+                        <Label.FormattedText >
+                            <FormattedString>
+                                <Span Text="" FontFamily="fa-Solid"  FontSize="Medium" TextColor="White"/>
+                                <Span Text=" Credit Card"  FontSize="Medium" TextColor="white" FontAttributes="Bold" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label 
+                       Grid.ColumnSpan="2"
+                       TextColor="White"
+                       HorizontalOptions="StartAndExpand"
+                       Grid.Row="2">
+                        <Label.FormattedText >
+                            <FormattedString>
+                                <Span Text="Card number"  FontSize="Medium" TextColor="{StaticResource TitleLabelColor}"/>
+                                <Span Text="{Static system:Environment.NewLine}"/>
+                                <Span Text="{Binding NumberCreditCard,Converter={StaticResource StringToFormatStripeConverter}}"  FontSize="32"  FontAttributes="Bold" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label 
+                        FontAttributes="Bold"
+                       TextColor="White"
+                       FontSize="Medium"
+                        Margin="10,0,10,0"
+                       HorizontalOptions="StartAndExpand"
+                       HorizontalTextAlignment="Center"
+                       Grid.Row="3">
+                        <Label.FormattedText >
+                            <FormattedString>
+                                <Span Text="Expiration date"  FontSize="Medium" TextColor="{StaticResource TitleLabelColor}"/>
+                                <Span Text="{Static system:Environment.NewLine}"/>
+                                <Span Text="{Binding ExpirationDate,StringFormat='{0:MM/yy}'}" TextColor="Gray"  FontSize="Medium" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Image Grid.Row="3"  Margin="10,5,10,0" Grid.Column="1" HorizontalOptions="EndAndExpand" >
+                        <Image.Source>
+                            <FontImageSource 
+                              FontFamily="fa-Brands"
+                             Glyph="{Binding NumberCreditCard,Converter={StaticResource NumberToImageTypeCardConverter}}"
+                             Color="{StaticResource TitleLabelColor}"
+                             Size="50"/>
+                        </Image.Source>
+                    </Image>
+
+                </Grid>
+                <yummy:PancakeView.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsVisible,Source={x:Reference FrontCreditCard}}"
+                                     Value="false"
+                                     TargetType="yummy:PancakeView">
+                        <Setter Property="Padding" Value="0,10,0,10"/>
+                        <Setter Property="Content">
+                            <Setter.Value>
+                                <Grid  RowDefinitions="Auto,Auto,*">
+                                    <BoxView    Visual="Material"   Grid.Row="0"  BackgroundColor="Black" HorizontalOptions="FillAndExpand"/>
+                                    <Image Grid.Row="3"  Margin="15"  HorizontalOptions="EndAndExpand" >
+                                        <Image.Source>
+                                            <FontImageSource 
+                                                     FontFamily="fa-Brands"
+                                                     Glyph="&#xf1f0;"
+                                                     Color="{StaticResource TitleLabelColor}"
+                                                     Size="50"/>
+                                        </Image.Source>
+                                    </Image>
+                                    <yummy:PancakeView Margin="0,30,0,0" BackgroundColor="#201f87" CornerRadius="5" Grid.Row="2"  VerticalOptions="EndAndExpand" HorizontalOptions="CenterAndExpand">
+                                        <Label 
+                                                FontAttributes="Bold"
+                                                TextColor="White"
+                                                FontSize="Medium"
+                                                Margin="10,0,10,0"
+                                                HorizontalTextAlignment="Center"
+                                                 >
+                                            <Label.FormattedText >
+                                                <FormattedString>
+                                                    <Span Text="{Binding Cvv,TargetNullValue='000',StringFormat='{0}'}" TextColor="White"  FontSize="40" />
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </yummy:PancakeView>
+                                </Grid>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </yummy:PancakeView.Triggers>
+            </yummy:PancakeView>
+            <Label  Text="Numeric Card" FontAttributes="Bold" FontSize="Title" TextColor="{StaticResource TitleLabelColor}" Grid.Row="2"/>
+            <yummy:PancakeView Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource PancakeEntryKey}">
+                <Entry Placeholder="0000-0000-0000-0000" MaxLength="16" Keyboard="Numeric"  Text="{Binding NumberCreditCard}"/>
+            </yummy:PancakeView >
+            <Label Text="Expiration date" FontAttributes="Bold" FontSize="Medium" TextColor="{StaticResource TitleLabelColor}" Grid.Row="4"/>
+            <yummy:PancakeView Grid.Row="5"  Style="{StaticResource PancakeEntryKey}">
+                <DatePicker Format="M/y" Date="{Binding ExpirationDate}"/>
+            </yummy:PancakeView>
+            <Label Text="Cvv" FontAttributes="Bold" FontSize="Medium" TextColor="{StaticResource TitleLabelColor}" Grid.Row="4" Grid.Column="1"/>
+            <yummy:PancakeView Grid.Column="1" Grid.Row="5"  Style="{StaticResource PancakeEntryKey}">
+                <Entry Text="{Binding Cvv}"  Focused="Entry_Focused" Unfocused="Entry_Focused" Placeholder="000" MaxLength="3"/>
+            </yummy:PancakeView>
+
+            <Label Text="Invoce No:" FontAttributes="Bold" FontSize="Medium" TextColor="{StaticResource TitleLabelColor}" Grid.Row="6" Grid.Column="0"/>
+            <yummy:PancakeView Grid.ColumnSpan="2" Grid.Row="7"  Style="{StaticResource PancakeEntryKey}">
+                <Entry Text="{Binding InvoceNo}"/>
+            </yummy:PancakeView>
+            <yummy:PancakeView Grid.Column="1" Grid.Row="8" Margin="10">
+                <Grid VerticalOptions="CenterAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{OnPlatform iOS=0.4*,Android=0.5*}"/>
+                        <ColumnDefinition Width="{OnPlatform iOS=1.5*,Android=1.5*}"/>
+                    </Grid.ColumnDefinitions>
+                    <yummy:PancakeView CornerRadius="{OnPlatform Android=60,iOS=18}"  BackgroundColor="#5E29F2">
+
+                        <Label  Text="{Binding SelectCurrency.Symbol}" FontAttributes="Bold" HorizontalTextAlignment="Center" FontSize="16"  VerticalOptions="CenterAndExpand" TextColor="White"  HorizontalOptions="CenterAndExpand">
+
+                        </Label>
+                    </yummy:PancakeView>
+                    <Picker Grid.Column="1" HorizontalOptions="FillAndExpand"
+                                ItemsSource="{Binding Currencies}"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource TitleLabelColor}"
+                                SelectedItem="{Binding SelectCurrency}"
+                                ItemDisplayBinding="{Binding Name}"/>
+                </Grid>
+            </yummy:PancakeView>
+            <Label   FontSize="24"  VerticalOptions="CenterAndExpand" TextColor="{StaticResource TitleLabelColor}" Grid.Row="8">
+                <Label.FormattedText >
+                    <FormattedString>
+                        <Span Text="Total" TextColor="White" FontAttributes="Bold"  FontSize="Medium" />
+                        <Span Text="{Static system:Environment.NewLine}"/>
+                        <Span Text="{Binding TotalAmount,StringFormat='{0:C2}'}" TextColor="White"  FontSize="24" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+        </Grid>
+        <yummy:PancakeView  VerticalOptions="EndAndExpand" Style="{StaticResource ButtonPayNow}" >
+            <Grid ColumnDefinitions="0.3*,1*" >
+                <yummy:PancakeView CornerRadius="20"  BackgroundColor="#5826E3">
+                    <yummy:PancakeView.Shadow>
+                        <yummy:DropShadow Offset="10,10" BlurRadius="2"  Color="#5E29F2"/>
+                    </yummy:PancakeView.Shadow>
+                    <Image HorizontalOptions="CenterAndExpand" >
+                        <Image.Source>
+
+                            <FontImageSource 
+                              FontFamily="fa-Solid"
+                             Glyph="&#xf155;"
+                             Color="White"
+                             Size="Title"/>
+                        </Image.Source>
+                    </Image>
+                </yummy:PancakeView>
+                <Label Grid.Column="1" Margin="10,5,40,5" TextColor="White" VerticalOptions="CenterAndExpand" FontSize="Title" Text="Pay Now"/>
+            </Grid>
+            <yummy:PancakeView.Behaviors>
+                <behaviers:ViewTappedButtonBehavior  AnimationType="Scale"/>
+            </yummy:PancakeView.Behaviors>
+        </yummy:PancakeView>
+    </Grid>
+</ContentPage>

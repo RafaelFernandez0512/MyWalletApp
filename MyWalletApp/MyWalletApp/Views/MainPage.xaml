@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             x:Class="MyWalletApp.MainPage"
+         xmlns:sharedTransitions="clr-namespace:Plugin.SharedTransitions;assembly=Plugin.SharedTransitions"
+             NavigationPage.HasNavigationBar="False"
+             sharedTransitions:SharedTransitionNavigationPage.BackgroundAnimation="SlideFromRight"
+             Visual="Material"
+               xmlns:system="clr-namespace:System;assembly=netstandard" xmlns:controls="clr-namespace:MyWalletApp.Views.Controls" xmlns:behaviers="clr-namespace:MyWalletApp.Behaviers">
+    <ContentPage.Resources>
+        <Style TargetType="Image" x:Key="FontAwesomeImageKey">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Label" x:Key="SubtitleLabelKey">
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+            <Setter Property="TextColor" Value="{StaticResource TitleLabelColor}"/>
+        </Style>
+  
+    </ContentPage.Resources>
+
+        <yummy:PancakeView OffsetAngle="180" BackgroundGradientStartPoint="1,2" 
+                       BackgroundGradientEndPoint="0,3">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="Auto,*"  Visual="Material">
+                
+                <yummy:PancakeView Padding="10,20,10,20" Grid.ColumnSpan="2"  BackgroundColor="{StaticResource PrimaryColor}"
+                                    CornerRadius="0,0,60,60"
+                                  sharedTransitions:Transition.Name="pancakeInfo">
+                    <yummy:PancakeView.Behaviors>
+                        <behaviers:ViewTappedButtonBehavior Command="{Binding GoToNavigationCommand}" AnimationType="Scale"/>
+                    </yummy:PancakeView.Behaviors>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+                        
+                        <Label Text="{Binding Customer.Name,StringFormat='Good morning, {0}'}"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       Margin="10"
+                       VerticalOptions="Start"
+                       VerticalTextAlignment="Start"
+                       TextColor="{StaticResource TitleLabelColor}"/>
+                        <yummy:PancakeView HorizontalOptions="EndAndExpand" 
+                                   CornerRadius="30"
+                                   WidthRequest="55"
+                                    sharedTransitions:Transition.Name="pancakeImage"
+                                   Margin="10"
+                                   Border="{yummy:BorderMarkup Thickness=3,Color='#5826E3'}"
+                                   VerticalOptions="FillAndExpand"
+                                   Grid.Column="1">
+                            <yummy:PancakeView.Shadow>
+                                <yummy:DropShadow Offset="10,10" BlurRadius="2" Color="{StaticResource PrimaryColor}"/>
+                            </yummy:PancakeView.Shadow>
+                            <Image Source="{Binding Customer.Photo}" Aspect="AspectFill"/>
+                        </yummy:PancakeView>
+
+                        <Label
+                       
+                       Grid.Row="1"
+                       VerticalOptions="EndAndExpand"
+                       HorizontalOptions="CenterAndExpand"
+                       Grid.ColumnSpan="2"
+                       HorizontalTextAlignment="Center"
+                      >
+                            <Label.FormattedText >
+                                <FormattedString>
+                                    <Span Text="ESTIMATED VALUE" FontSize="Small" TextColor="{StaticResource SubtitletColor}"/>
+                                <Span Text="{Static system:Environment.NewLine}"/>
+                                <Span  Text="{Binding Customer.Balance,StringFormat='{0:C2}'}" FontSize="40" TextColor="{StaticResource TitleLabelColor}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <Label Text="{Binding TotalAmountNotPaid,StringFormat='Pending: {0:C2}'}"
+                       FontSize="Small"
+                       Grid.Row="2"
+                       Margin="10,0,20,10"
+                       VerticalOptions="Start" 
+                       HorizontalOptions="EndAndExpand"
+                       VerticalTextAlignment="Start"
+                       TextColor="{StaticResource PositiveAmountColor}"/>
+
+                        <Label Text="{Binding TotalAmountPaid,StringFormat='- {0:C2}'}"
+                       FontSize="Small"
+                          Grid.Row="2"
+                       Margin="20,0,10,40"
+                          
+                       Grid.Column="1"
+                       VerticalOptions="Start"
+                       VerticalTextAlignment="Start"
+                       TextColor="{StaticResource SubtitletColor}"/>
+                    </Grid>
+                </yummy:PancakeView>
+                <Label Grid.Row="1" Style="{StaticResource SubtitleLabelKey}" FontSize="Title" HorizontalOptions="CenterAndExpand" Text="Personal Data" Grid.ColumnSpan="2"/>
+
+                <Label Grid.Row="2" Style="{StaticResource SubtitleLabelKey}"  Text="{Binding Customer.Email}" Grid.Column="1"/>
+                <Image Grid.Row="2" Style="{StaticResource FontAwesomeImageKey}">
+                    <Image.Source>
+
+                        <FontImageSource 
+                              FontFamily="fa-Solid"
+                             Glyph="&#xf1fa;"
+                             Color="{StaticResource TitleLabelColor}"
+                             Size="Title"/>
+                    </Image.Source>
+                </Image>
+
+                <Label Grid.Row="3" Style="{StaticResource SubtitleLabelKey}" Text="{Binding Customer.Phone}" Grid.Column="1"/>
+                <Image Grid.Row="3"  Style="{StaticResource FontAwesomeImageKey}">
+                    <Image.Source>
+
+                        <FontImageSource 
+                              FontFamily="fa-Solid"
+                             Glyph="&#xf3cd;"
+                             Color="{StaticResource TitleLabelColor}"
+                             Size="Title"/>
+                    </Image.Source>
+                </Image>
+                <Label Grid.Row="4" Style="{StaticResource SubtitleLabelKey}" Text="FullName" Grid.Column="1">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Customer.Name}"/>
+                            <Span Text="{Binding Customer.LastName,StringFormat=' {0}'}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+
+                </Label>
+                <Image Grid.Row="4"  Style="{StaticResource FontAwesomeImageKey}">
+                    <Image.Source>
+
+                        <FontImageSource 
+                              FontFamily="fa-Solid"
+                             Glyph="&#xf007;"
+                             Color="{StaticResource TitleLabelColor}"
+                             Size="Title"/>
+                    </Image.Source>
+                </Image>
+
+                <Label Margin="30,10,10,10" Grid.Row="6" Style="{StaticResource SubtitleLabelKey}" Text="Activity" FontSize="Title" Grid.ColumnSpan="2"/>
+                <controls:ChartLineView BackgroundColor="Transparent" Grid.Row="7"  Grid.ColumnSpan="2" ChartLine="{Binding ChartEntrys,Mode=TwoWay}" HorizontalOptions="FillAndExpand"/>
+            <yummy:PancakeView Grid.Row="8" Style="{StaticResource ButtonPayNow}" Grid.ColumnSpan="2" >
+                <Grid ColumnDefinitions="0.3*,1*" >
+                    <yummy:PancakeView CornerRadius="20"  BackgroundColor="#5826E3">
+                        <yummy:PancakeView.Shadow>
+                            <yummy:DropShadow Offset="10,10" BlurRadius="2"  Color="#5E29F2"/>
+                        </yummy:PancakeView.Shadow>
+                        <Image HorizontalOptions="CenterAndExpand" >
+                            <Image.Source>
+
+                                <FontImageSource 
+                              FontFamily="fa-Solid"
+                             Glyph="&#xf155;"
+                             Color="White"
+                             Size="Title"/>
+                            </Image.Source>
+                        </Image>
+                    </yummy:PancakeView>
+                    <Label Grid.Column="1" Margin="10,5,40,5" TextColor="White" VerticalOptions="CenterAndExpand" FontSize="Title" Text="Pay Now"/>
+                </Grid>
+                <yummy:PancakeView.Behaviors>
+                    <behaviers:ViewTappedButtonBehavior Command="{Binding GoToPayNowCommand}" AnimationType="Scale"/>
+                </yummy:PancakeView.Behaviors>
+            </yummy:PancakeView>
+
+
+
+        </Grid>
+            <yummy:PancakeView.BackgroundGradientStops >
+                <yummy:GradientStopCollection >
+                    <yummy:GradientStop Offset="0" Color="#2C0E82" />
+                    <yummy:GradientStop Offset="1" Color="#1C065B" />
+                </yummy:GradientStopCollection>
+            </yummy:PancakeView.BackgroundGradientStops>
+        </yummy:PancakeView>
+  
+</ContentPage>
