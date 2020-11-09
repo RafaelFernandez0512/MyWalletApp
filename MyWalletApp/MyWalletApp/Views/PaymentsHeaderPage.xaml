@@ -129,7 +129,7 @@
                                     <DataTrigger TargetType="Grid"
                                                  Binding="{Binding IsSelected}"
                                                  Value="true">
-                                        <Setter Property="BackgroundColor" Value="Red" />
+                                        <Setter Property="BackgroundColor" Value="{StaticResource NegativeAmountColor}" />
                                     </DataTrigger>
                                 </Grid.Triggers>
 
@@ -139,7 +139,7 @@
                     <CollectionView.Footer>
 
                         <Grid RowDefinitions="Auto,Auto,250">
-                          <Label Text="Show All Invoces"
+                          <Label Text="Show All transactions"
                            FontSize="Medium"
                            
                             VerticalOptions="StartAndExpand"

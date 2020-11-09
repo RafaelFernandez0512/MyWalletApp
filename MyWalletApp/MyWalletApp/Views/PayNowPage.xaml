@@ -62,7 +62,7 @@
                             <FormattedString>
                                 <Span Text="Card number"  FontSize="Medium" TextColor="{StaticResource TitleLabelColor}"/>
                                 <Span Text="{Static system:Environment.NewLine}"/>
-                                <Span Text="{Binding NumberCreditCard,Converter={StaticResource StringToFormatStripeConverter}}"  FontSize="32"  FontAttributes="Bold" />
+                                <Span Text="{Binding NumberCreditCard,Converter={StaticResource StringToFormatStripeConverter}}"  FontSize="26"  FontAttributes="Bold" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>
