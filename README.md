@@ -11,7 +11,7 @@
 - SharedTransitions.
 - Prism.
 
-# inspired by
+# Inspired by
 
 - https://github.com/CrossGeeks/PaymentUISample
 - https://dribbble.com/shots/6504858-Multi-currency-Wallet-App-UI
