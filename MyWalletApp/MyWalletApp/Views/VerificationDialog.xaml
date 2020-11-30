@@ -18,7 +18,7 @@
             <Label.FormattedText>
                 <FormattedString>
                     <Span   Text="" 
-                            FontSize="Header" 
+                            FontSize="60" 
                             FontFamily="FontAwesomeSolid"
                             TextColor="{StaticResource PositiveAmountColor}"/>
                     <Span Text="{x:Static system:Environment.NewLine}"/>
